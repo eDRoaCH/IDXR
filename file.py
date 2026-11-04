@@ -5,12 +5,14 @@ from datetime import datetime
 class File:
 
     def __init__(self, path):
-        #TODO: block out directories, error handling
-        self.path = path
-        self.compute_info()
-        self.compute_hash()
-        self.compute_stats()
-
+        if path.is_file():
+            self.path = path
+            self.compute_info()
+            self.compute_hash()
+            self.compute_stats()
+        else:
+            pass
+        
     def __repr__(self):
         return f'FILE: {self.path}, NAME: {self.filename}, EXT: {self.extension}, Size(B): {self.size_bytes}, Size(H): {self.human_size}, MOD: {self.last_modification_time}, SHA: {self.sha256}'
 
