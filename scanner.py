@@ -25,12 +25,19 @@ class Scanner:
                 result += file.__repr__()
         return result
 
-    def scan(self):
+    def scan(self, path=None, root=None):
+        if path is None:
+            path = self.path
+        if root is None:
+            root = self.path
         self.files = []
         if self.first_scan:
-            for item in self.path.iterdir():
+            for item in path.iterdir():
                 if item.is_dir():
-                    self.scan(item)
+                    self.scan(item, root=self.path)
                 if item.is_file():
-                    self.files.append(File(item))
-        
+                    self.files.append(File(item, root))
+
+    def add_file(self, path):
+        relative_path = path.relative_to(self.root)
+        self.files.append(File(relative_path))    

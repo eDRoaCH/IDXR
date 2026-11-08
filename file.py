@@ -4,17 +4,27 @@ from datetime import datetime
 
 class File:
 
-    def __init__(self, path):
+    def __init__(self, path, root):
+        ### TODO: to store: posix_path, size(b), MOD(as unix timestamp), SHA. everything else can be derived at display time (full path, name, ext, size(h))
         if path.is_file():
             self.path = path
+            self.root = root
+            self.relative_path = path.relative_to(root)
+            self.compute_relative_posix()
             self.compute_info()
             self.compute_hash()
             self.compute_stats()
         else:
             pass
-        
+
     def __repr__(self):
-        return f'FILE: {self.path}, NAME: {self.filename}, EXT: {self.extension}, Size(B): {self.size_bytes}, Size(H): {self.human_size}, MOD: {self.last_modification_time}, SHA: {self.sha256}'
+        return (
+            f"FILE: {self.path}\n"
+            f"  RELATIVE: {self.relative_path}, POSIX: {self.relative_posix},\n "
+            f"  NAME: {self.filename},  EXT: {self.extension},\n"
+            f"  Size(B): {self.size_bytes}, Size(H): {self.human_size},\n"
+            f"  MOD: {self.last_modification_time}, SHA: {self.sha256}\n"
+        )
 
     def compute_info(self):
         self.filename = self.path.name
@@ -34,6 +44,10 @@ class File:
         self.last_modification_time = datetime.fromtimestamp(stat.st_mtime)
         self.size_bytes = stat.st_size
         self.human_size = self.human_size(stat.st_size)
+
+    def compute_relative_posix(self):
+        relative = self.path.relative_to(self.root)
+        self.relative_posix = relative.as_posix()
 
     @staticmethod
     def human_size(size_bytes):
