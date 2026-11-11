@@ -9,16 +9,16 @@ def main():
     dir_path = Path("./tests/test_files/")
 
     # file test
-    file_file = File(file_path, dir_path)
-    print(f'FILE: {file_file}')
+    #file_file = File(file_path, dir_path)
+    #print(f'FILE: {file_file}')
     # file test: will fail
     #dir_file = File(dir_path, dir_path)
     #print(f'File: {dir_file}')
     
     # scanner test
-    dir_scan = Scanner(dir_path)
+    dir_scan = Scanner(dir_path, first_scan=True)
     dir_scan.scan()
-    print(f'SCAN: {scan}')
+    print(f'SCAN: {dir_scan}')
     # Will throw exception
     #file_scan = Scanner(file_path)
     #file_scan.scan()
